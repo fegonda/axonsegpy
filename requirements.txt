@@ -1,1 +1,7 @@
-wheel>=0.22
+Cython
+skimage
+numpy
+scipy
+Tkinter
+matplotlib
+scikit-image
