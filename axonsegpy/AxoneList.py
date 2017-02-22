@@ -17,12 +17,12 @@ class AxoneList:
             self.__nbrAxone=len(listAxone)
 
     #insert an axone and increment nbrAxone
-    def insert(self,axone):
+    def insert(self,axon):
         """
-        :param axone: the axone to insert
+        :param axon: the axone to insert
         :return: none
         """
-        self.__listAxone.add(axone)
+        self.__listAxone.add(axon)
         self.__nbrAxone+=1
     #Overload + for adding two axonelist. duplicate won't be copied.
     def __add__(self,other):
@@ -67,7 +67,7 @@ class AxoneList:
         """
         liste=AxoneList()
         for axone in self.__listAxone:
-            if axone.getDiametre()<diametre:
+            if axone.getDiameter()<diametre:
                 liste.insert(axone)
         return liste
     def getAxoneHigherThanDiametre(self,diametre):
@@ -77,14 +77,14 @@ class AxoneList:
         """
         liste=AxoneList()
         for axone in self.__listAxone:
-            if axone.getDiametre()>diametre:
+            if axone.getDiameter()>diametre:
                 liste.insert(axone)
         return liste
-    def getDiametreMean(self):
+    def getDiameterMean(self):
         """
         :return: the mean od the diametre of all axone
         """
         temp=0
         for axone in self.__listAxone:
-            temp+=axone.getDiametre()
+            temp+=axone.getDiameter()
         return temp/self.getNbrAxone()

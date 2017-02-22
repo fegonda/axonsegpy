@@ -9,7 +9,7 @@ class axonDeepSeg:
         print('axonDeepSeg')  # dummy, to replace with actual results
 
 
-class runAlgo:
+class algoRunner:
     def __init__(self, strategy):
         self.strategy = strategy
 

@@ -4,22 +4,23 @@
 # are listed with AxoneList          #
 ######################################
 class Axone:
-    def __init__(self,posxCentroide,posyCentroide,diametre):
+    def __init__(self,tags):
         """
         :param posxCentroide: position x, of the centroide for this axone. In pixel
         :param posyCentroide: position y, of the centroide for this axone. In pixel
         :param diametre: daimetre of the axone
         :return: no return
         """
-        self.__posxCentroide=posxCentroide#en pixel
-        self.__posyCentroide=posyCentroide
-        self.__diametre=diametre
+        self.__posxCentroide=tags.centroid[0]#en pixel
+        self.__posyCentroide=tags.centroid[1]
+        self.__diameter=tags.equivalent_diameter
+        self.__tags = tags;
 
-    def getDiametre(self):
+    def getDiameter(self):
         """
         :return: diametre for this axone
         """
-        return self.__diametre
+        return self.__diameter
 
     def getPosx(self):
         """
@@ -37,10 +38,10 @@ class Axone:
         """
         :return: a (unique?) hash for the axone. Every hash is calculate with all 3 three parameters for each axone
         """
-        return hash((self.__diametre,self.__posxCentroide,self.__posyCentroide))
+        return hash((self.__diameter,self.__posxCentroide,self.__posyCentroide))
 
     def __eq__(self, other):
         """
          :return: boolean. allow to compare axone beetween them.
          """
-        return self.__diametre,self.__posxCentroide,self.__posyCentroide==other.__diametre,other.__posxCentroide,other.__posyCentroide
+        return self.__diameter,self.__posxCentroide,self.__posyCentroide==other.__diametre,other.__posxCentroide,other.__posyCentroide
