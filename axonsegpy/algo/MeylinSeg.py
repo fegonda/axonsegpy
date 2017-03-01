@@ -177,7 +177,7 @@ def run(params):
 
     testImage = io.imread(filename)
     meylinImage = io.imread(meylinFile)
-    melynList=AxonSeg.axonSeg(testImage,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
+    melynList=AxonSeg.axonSeg(testImage,{"minSize":10,"Solidity":0.1,"MinorMajorRatio":0.5})
     mask = GenMask.generateAxonMask(testImage,melynList)
 
 
@@ -194,3 +194,4 @@ def run(params):
     meylinVisual = MeylinVisualisation(testImage,melynList)
     melynList.save(outputLst)
     io.imsave(outputImg, meylinVisual)
+    io.imsave(outputImg[:-4]+".axonmask.png", mask)

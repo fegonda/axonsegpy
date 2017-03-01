@@ -48,5 +48,5 @@ def run(params):
     except KeyError:
         f_output = f_input + ".list.bin"
     image = io.imread(f_input)
-    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
+    axonList=axonSeg(image, params)
     axonList.save(f_output)
