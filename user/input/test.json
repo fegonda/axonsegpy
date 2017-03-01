@@ -17,7 +17,7 @@
             "input":"../user/input/axone.png",
             "meylinImage":"../user/input/myelin.png",
             "outputImage":"../user/output/myelin_mask.png",
-            "outputList":"../user/output/myelin.csv"
+            "outputList":"../user/output/myelin.bin"
          }
       }
    ]

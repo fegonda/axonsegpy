@@ -71,8 +71,16 @@ class Axone:
         return self.meylinDiameter
 
     def toArray(self):
-        return [
-            self.__posxCentroide,
-            self.__posyCentroide,
-            self.__diameter,
-            self.__tags]
+        try:
+            return [
+                self.__posxCentroide,
+                self.__posyCentroide,
+                self.__diameter,
+                self.meylin,
+                self.__tags]
+        except:
+            return [
+                self.__posxCentroide,
+                self.__posyCentroide,
+                self.__diameter,
+                self.__tags]

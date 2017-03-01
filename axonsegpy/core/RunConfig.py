@@ -2,10 +2,10 @@ import importlib
 
 # TODO -- Try catch ?
 def runAlgo(name, variables):
-	try:
+#	try:
 		module = importlib.import_module(name)
 		module.run(variables)
 
-	except Exception as e:
-		print(str(e))
-		print("Error in module '" + name + "' found !")
+#	except Exception as e:
+#		print(str(e))
+#		print("Error in module '" + name + "' found !")

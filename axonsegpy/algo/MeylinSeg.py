@@ -58,7 +58,7 @@ def MeylinSeg(image, axonList, mask):
 
 
 def MeylinVisualisation(image, axonList):
-    retImage = np.zeros(image.shape,dtype=np.uint8)
+    retImage = np.zeros(image.shape,dtype=np.int)
     for axon in axonList.getAxoneList():
         for i in range(72):
             retImage[axon.getMeylin()[0][i][0]-1][axon.getMeylin()[0][i][1]-1] = 127
@@ -191,6 +191,6 @@ def run(params):
         if diam<minV:
             minV = diam
     #print(minV,maxV)
-    meylinVisual = MeylinVisualisationSuperDuperFancy(testImage,melynList,minV,maxV)
+    meylinVisual = MeylinVisualisation(testImage,melynList)
     melynList.save(outputLst)
     io.imsave(outputImg, meylinVisual)
