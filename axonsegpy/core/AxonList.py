@@ -88,3 +88,40 @@ class AxoneList:
         for axone in self.__listAxone:
             temp+=axone.getDiameter()
         return temp/self.getNbrAxone()
+
+    def save(self, output):
+        """
+        :param output: file where to save
+        """
+        import _pickle as cPickle
+        fileFormat = output.split('.')[-1]
+        if fileFormat == "csv":
+            # In CSV, we ignore the tags, for now
+            # TODO Find an alternative !
+            f = open(output, 'w')
+            for axon in self.__listAxone:
+                current = axon.toArray()
+                for i in range(len(current)-1):
+                    if "float" in str(type(current[i])):
+                        current[i] = "%.10f" % current[i]
+                listAxone = ','.join(current[:-1])
+                f.write(listAxone + "\n")
+            f.seek(0,0)
+            f.close()
+            
+        else:
+            if output[-4:] != ".bin":
+                output += ".bin"
+            cPickle.dump(self.__listAxone, open(output, "wb"))
+
+    def load(self, inputFile):
+        """
+        :param output: file where to save
+        :param format: format to save into
+        """
+        import _pickle as cPickle
+        if inputFile.split('.')[-1] != "bin":
+            #  TODO Import CSV ?
+            print("Sorry, can only import binary numpy arrays for now !\n\tSo we can't import CSV for the moment.")
+        else:
+            self.__listAxone = cPickle.load(open(inputFile, "rb"))

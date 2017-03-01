@@ -2,7 +2,7 @@
 import sys
 import Axone
 import AxoneList
-sys.path.insert(1, '../axonsegpy')
+sys.path.insert(1, '../axonsegpy/algo')
 
 ######################################
 # Class AxoneTest will test methode  #

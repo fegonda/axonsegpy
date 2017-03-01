@@ -17,10 +17,8 @@ def axonSeg(image, params):
     :param params:
     :return:AxonList de tous les axon trouves
     """
-    print("WWW")
-    image = measure.label(image)
-    props = (measure.regionprops(image))
-    list = AxoneList();
+    props = (measure.regionprops(measure.label(image)))
+    axonList = AxoneList();
     b= 0
     for region in props:
         current = Axone(region)
@@ -29,26 +27,26 @@ def axonSeg(image, params):
             if(region.area<params["minSize"]):
                 valid = False
         if valid:
-            if "-" in params:
+            if "Solidity" in params:
                 if(region.solidity< params["Solidity"]):
                     valid = False
 
         if valid:
             if "MinorMajorRatio" in params:
-                if(region.eccentricity< params["MinorMajorRatio"]):
+                if(region.eccentricity> params["MinorMajorRatio"]):
                     valid = False
         if valid:
-            list.insert(current)
+            axonList.insert(current)
             b = b+1
-    print(b)
-    return list
+    return axonList
 
 
-def test():
-    filename = os.path.join('../test/SegTest/', 'w1.png')
-    testImage =     moon = io.imread(filename)
-    list=axonSeg(testImage,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
-    mean=list.getDiameterMean();
-    print(mean)
-test()
-
+def run(params):
+    f_input = params["input"]
+    try:
+        f_output = params["output"]
+    except KeyError:
+        f_output = f_input + ".list.bin"
+    image = io.imread(f_input)
+    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
+    axonList.save(f_output)

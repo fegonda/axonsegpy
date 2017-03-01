@@ -1,43 +1,27 @@
-import datetime
 import sys
 import argparse
-from algoRunner import algoRunner
 
-# TODO : replace with ref to actual algos
-from algoRunner import extentedMinima
-from algoRunner import axonDeepSeg
+# Temporary (to remove !!!) ##TODO
+sys.path.insert(1, './algo')
+sys.path.insert(1, './core')
+sys.path.insert(1, './lib')
 
+import ConfigParser
 
 def main():
     # Get args
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--source')
-    parser.add_argument('-a', '--algorithm')  # TODO : replace with config file
+    parser.add_argument('-c', '--config')  # TODO : replace with config file
 
     # Parse args
     args = parser.parse_args()
-    imagePath = args.source
-    algorithm = args.algorithm
+    config = args.config
 
-    if imagePath == "":
-        print("Invalid path")
-        sys.exit(2)
+    if config == "" or config == None:
+        config = "../user/input/test.json" # Test configuration
 
     # We initialise the algo runner with an aldo
-    if algorithm == "minima":
-        algo = algoRunner(extentedMinima())
-    elif algorithm == "axonDeepSeg":
-        algo = algoRunner(axonDeepSeg())
-
-    # Run algorithm
-    algo.execute(imagePath)
-
-    # We can change algo at runtime
-    algo.changeAlgorithm(axonDeepSeg())
-
-    # Run algorithm
-    algo.execute(imagePath)
-
+    ConfigParser.parse(config)
 
 if __name__ == "__main__":
     main()
