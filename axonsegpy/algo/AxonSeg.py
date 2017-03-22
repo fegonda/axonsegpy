@@ -1,4 +1,4 @@
-
+import pyximport;pyximport.install()
 from Axon import Axone
 from AxonList import AxoneList
 import numpy as np
@@ -8,24 +8,57 @@ from skimage import color
 from skimage import measure
 import time
 import cProfile
+import minima
+import GenMask
+from decimal import *
 
-
-def axonSeg(image, params):
+def axonSeg(image, params,verbose = False):
     """
     Segmentation d'axon
     :param image: Image lu
     :param params:
     :return:AxonList de tous les axon trouves
     """
-    props = (measure.regionprops(measure.label(image)))
+
+    h = 0
+    if('h' in params):
+        h= params['h']
+    else:
+        h = image.std()
+    if verbose:
+        print("Axon seg started, params=",params)
+    minImage = minima.imExtendedMin(image, h)
+
+    if verbose:
+        print("Minima ended")
+    props = (measure.regionprops(measure.label(minImage)))
+
+    if verbose:
+        print("RegionProps ended regions found:",len(props))
     axonList = AxoneList();
+    axonList.axonMask = minImage
     b= 0
+    c = Decimal(0)
+    total = len(props)
     for region in props:
+        if(verbose):
+            b+=1
+            if(c*total<b):
+                print(round(c*Decimal(100)),'%')
+                c+=Decimal(0.1)
+
+
         current = Axone(region)
         valid = True
         if "minSize" in params:
             if(region.area<params["minSize"]):
                 valid = False
+
+        if valid:
+            if "maxSize" in params:
+                if (region.area > params["maxSize"]):
+                    valid = False
+
         if valid:
             if "Solidity" in params:
                 if(region.solidity< params["Solidity"]):
@@ -37,7 +70,15 @@ def axonSeg(image, params):
                     valid = False
         if valid:
             axonList.insert(current)
-            b = b+1
+
+    if verbose:
+        print("Axon seg ended, axon found:",len(axonList.getAxoneList()))
+        print("generating mask")
+    axonList.axonMask = GenMask.generateAxonMask(axonList.axonMask, axonList)
+    axonList.minima = minImage
+    if verbose:
+        print("AxonSeg ended")
+
     return axonList
 
 
@@ -48,5 +89,18 @@ def run(params):
     except KeyError:
         f_output = f_input + ".list.bin"
     image = io.imread(f_input)
-    axonList=axonSeg(image, params)
+    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
     axonList.save(f_output)
+
+
+
+def test():
+    filename = os.path.join('../../test/SegTest/', '20160830_CARS_Begin_07.tif')
+    testImage = io.imread(filename)
+    list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})
+    mean=list.getDiameterMean();
+    print(mean,len(list.getAxoneList()))
+
+    io.imsave('../../test/axonMask.png', list.axonMask)
+
+
