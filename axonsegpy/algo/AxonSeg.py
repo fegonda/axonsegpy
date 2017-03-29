@@ -89,14 +89,14 @@ def run(params):
     :return: no return , axonlist saved
     """
     f_input = params["input"]
+    p_inputs = params["param"]
     try:
         f_output = params["output"]
     except KeyError:
         f_output = f_input + ".list.bin"
     image = io.imread(f_input)
-    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
+    axonList=axonSeg(image,p_inputs)
     axonList.save(f_output)
-
 
 
 def test():

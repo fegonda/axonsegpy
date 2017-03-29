@@ -8,6 +8,7 @@
          "name":"AxonSeg",
          "params":{
             "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "param":{"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85},
             "output":"../tests/SegTest/Step_2_Initial_AxonSeg.csv"
          }
       },
