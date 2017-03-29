@@ -1,6 +1,6 @@
 import pyximport;pyximport.install()
-from Axon import Axone
-from AxonList import AxoneList
+from core.Axon import Axone
+from core.AxonList import AxoneList
 import numpy as np
 import os
 from skimage import io
@@ -8,11 +8,11 @@ from skimage import color
 from skimage import measure
 import time
 import cProfile
-import minima
-import GenMask
+from algo import minima
+from algo import GenMask
 from decimal import *
 
-def axonSeg(image, params,verbose = False):
+def axonSeg(image, params,verbose = True):
     """
     Segmentation d'axon
     :param image: Image lu
@@ -83,6 +83,11 @@ def axonSeg(image, params,verbose = False):
 
 
 def run(params):
+    """
+    " this methods run the algo
+    :param params:  input for the alogo
+    :return: no return , axonlist saved
+    """
     f_input = params["input"]
     try:
         f_output = params["output"]
@@ -95,6 +100,10 @@ def run(params):
 
 
 def test():
+    """
+    Test the algorithme
+    :return:
+    """
     filename = os.path.join('../../test/SegTest/', '20160830_CARS_Begin_07.tif')
     testImage = io.imread(filename)
     list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})

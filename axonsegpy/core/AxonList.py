@@ -125,3 +125,5 @@ class AxoneList:
             print("Sorry, can only import binary numpy arrays for now !\n\tSo we can't import CSV for the moment.")
         else:
             self.__listAxone = cPickle.load(open(inputFile, "rb"))
+
+

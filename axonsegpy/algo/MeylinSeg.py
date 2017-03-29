@@ -1,6 +1,6 @@
 import pyximport;pyximport.install()
-from Axon import Axone
-from AxonList import AxoneList
+from core.Axon import Axone
+from core.AxonList import AxoneList
 import numpy as np
 import os
 from skimage import io
@@ -10,8 +10,8 @@ from skimage import draw
 from skimage import segmentation
 from skimage import filters
 import time
-import AxonSeg
-import GenMask
+from algo import AxonSeg
+from algo import GenMask
 from skimage.segmentation import active_contour
 
 def segMeylin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False):
@@ -231,29 +231,21 @@ def test():
 
 def run(params):
     filename = params["input"]
-    meylinFile = params["meylinImage"]
+    testImage = io.imread(filename)
     outputImg = params["outputImage"]
     outputLst = params["outputList"]
 
-    testImage = io.imread(filename)
-    meylinImage = io.imread(meylinFile)
-    melynList=AxonSeg.axonSeg(testImage,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
-    mask = GenMask.generateAxonMask(testImage,melynList)
+    if "inputList" in params:
+        melynList=AxoneList.load(params["inputList"])
+    else:
+        melynList=AxonSeg.axonSeg(testImage,{"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85},True)
 
+    MeylinSeg(testImage,melynList,verbose = True)
 
-    MeylinSeg(meylinImage,melynList,mask)
-    minV = 9999
-    maxV = -1
-    for axon in melynList.getAxoneList():
-        diam = axon.getAvMeylinDiameter()
-        if diam>max:
-            max = diam
-        if diam<min:
-            min = diam
-    print(min,max)
-    meylinVisual = MeylinVisualisation(testImage,list)
-    io.imsave('../../test/meylinVisual.png', meylinVisual)
+    meylinVisual = MeylinVisualisation(testImage,melynList)
+    meylinVisual = meylinVisual*0.5+testImage*0.5
+    meylinVisual = np.maximum(meylinVisual.astype(np.int),melynList.axonMask)
+    io.imsave(outputImg, meylinVisual)
 
     melynList.save(outputLst)
-    io.imsave(outputImg, meylinVisual)
 

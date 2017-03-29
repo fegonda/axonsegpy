@@ -1,5 +1,5 @@
 import json
-from RunConfig import runAlgo
+from core.RunConfig import runAlgo
 
 """
     This function will parse and execute the configFile

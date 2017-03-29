@@ -1,11 +1,11 @@
-import importlib
+from algo import *
+from core import *
+from sys import modules
 
-# TODO -- Try catch ?
 def runAlgo(name, variables):
-	try:
-		module = importlib.import_module(name)
-		module.run(variables)
+#	try:
+	modules["algo."+name].run(variables)
 
-	except Exception as e:
-		print(str(e))
-		print("Error in module '" + name + "' found !")
+#	except Exception as e:
+#		print(str(e))
+#		print("Error in module '" + name + "' found !")

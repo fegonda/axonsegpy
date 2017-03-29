@@ -2,10 +2,9 @@ import numpy as np
 import os
 from skimage import io
 from skimage import color
-from Axon import Axone
-from AxonList import AxoneList
+from core.Axon import Axone
+from core.AxonList import AxoneList
 import skimage
-import AxonSeg
 from libcpp.pair cimport pair
 from libcpp.stack cimport stack
 cimport cython
@@ -47,6 +46,7 @@ def generateAxonMask(image,axonList,maskValue = 255):
 
 
 def run(path):
+    from algo import AxonSeg
     testImage = io.imread(path)
     list = AxonSeg.axonSeg(testImage, {"minSize": 30, "Solidity": 0.3, "MinorMajorRatio": 0.1})
     ret = generateAxonMask(testImage,list)
