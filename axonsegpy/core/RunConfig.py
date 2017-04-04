@@ -9,4 +9,3 @@ def runAlgo(name, variables):
 	except Exception as e:
 		print(str(e))
 		print("Error in module '" + name + "' found !")
-		

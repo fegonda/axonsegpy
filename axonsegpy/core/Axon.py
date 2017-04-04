@@ -1,15 +1,15 @@
 import numpy as np
 ######################################
-# Class Axone This is the main object#
-# for  our program.  All the Axone   #
-# are listed with AxoneList          #
+# Class Axon This is the main object#
+# for  our program.  All the Axon   #
+# are listed with AxonList          #
 ######################################
-class Axone:
+class Axon:
     def __init__(self,tags,posxCentroide=None,posyCentroide=None,diameter=None):
         """
-        :param posxCentroide: position x, of the centroide for this axone. In pixel
-        :param posyCentroide: position y, of the centroide for this axone. In pixel
-        :param diametre: daimetre of the axone
+        :param posxCentroide: position x, of the centroide for this axon. In pixel
+        :param posyCentroide: position y, of the centroide for this axon. In pixel
+        :param diametre: daimetre of the axon
         :return: no return
         """
         if posxCentroide==None:
@@ -25,31 +25,31 @@ class Axone:
 
     def getDiameter(self):
         """
-        :return: diametre for this axone
+        :return: diametre for this axon
         """
         return self.__diameter
 
     def getPosx(self):
         """
-        :return: position x for this axone
+        :return: position x for this axon
         """
         return self.__posxCentroide
 
     def getPosy(self):
         """
-        :return: position Y for this axone
+        :return: position Y for this axon
         """
         return self.__posyCentroide
 
     def __hash__(self):
         """
-        :return: a (unique?) hash for the axone. Every hash is calculate with all 3 three parameters for each axone
+        :return: a (unique?) hash for the axon. Every hash is calculate with all 3 three parameters for each axon
         """
         return hash((self.__diameter,self.__posxCentroide,self.__posyCentroide))
 
     def __eq__(self, other):
         """
-         :return: boolean. allow to compare axone beetween them.
+         :return: boolean. allow to compare axon beetween them.
          """
         return self.__diameter,self.__posxCentroide,self.__posyCentroide==other.__diametre,other.__posxCentroide,other.__posyCentroide
 

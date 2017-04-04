@@ -1,26 +1,28 @@
 import json
 
-def modifyPreprocessing(configFile):
+def addAlgorithme(configFile,placeToAdd,algorithme):
     """
-    Should be use by the GUI to modifiy the configFile for the preprocessing
-    :param configFile:
-    :return:
+    :param configFile: path to File
+    :param placeToAdd: string for the step of the pipeline to modify
+    :param algorithme: algo to add.
+    :return: none
     """
     with open(configFile,"r") as jsonFile:
       data = json.load(jsonFile)
-    tmp=data["preprocessing"]
-def addAlgorithme(name,params):
+    tmp=data[placeToAdd]
+    tmp.append(algorithme)
+    data[placeToAdd]=tmp
+    with open('./newConfigFile.json',"w") as outFile:
+      print(data)
+      json.dump(data,outFile)
+def main():
     """
-    :param name: name of the algorthme
-    :param params: a arrayof nameparam/value
+    Just to test our class
     :return:
     """
-    temp= "{\"name\":\""+name+"\",\t\"params\":{"
-    #now add the param
-    for i,data in params:
-        if i!=len(params)-1:
-            temp += "\""+data[0]+":\""+data[1]+"\",\t"#Need to know if last param
-        else:
-            temp += "\"" + data[0] + ":\"" + data[1] + "\"\t"
-    temp += "}\t}\t"
-    return temp
+    print("letsgo")
+    parametre= {'jack': 4098, 'sape': 4139}
+    algorithme={'name': 'test', 'parametre': parametre}
+    addAlgorithme("../test.json",algorithme)
+if __name__ == "__main__":
+    main()

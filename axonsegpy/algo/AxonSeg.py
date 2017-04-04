@@ -1,6 +1,6 @@
 import pyximport;pyximport.install()
-from core.Axon import Axone
-from core.AxonList import AxoneList
+from core.Axon import Axon
+from core.AxonList import AxonList
 import numpy as np
 import os
 from skimage import io
@@ -35,7 +35,7 @@ def axonSeg(image, params,verbose = True):
 
     if verbose:
         print("RegionProps ended regions found:",len(props))
-    axonList = AxoneList();
+    axonList = AxonList();
     axonList.axonMask = minImage
     b= 0
     c = Decimal(0)
@@ -48,7 +48,7 @@ def axonSeg(image, params,verbose = True):
                 c+=Decimal(0.1)
 
 
-        current = Axone(region)
+        current = Axon(region)
         valid = True
         if "minSize" in params:
             if(region.area<params["minSize"]):
@@ -72,7 +72,7 @@ def axonSeg(image, params,verbose = True):
             axonList.insert(current)
 
     if verbose:
-        print("Axon seg ended, axon found:",len(axonList.getAxoneList()))
+        print("Axon seg ended, axon found:",len(axonList.getAxonList()))
         print("generating mask")
     axonList.axonMask = GenMask.generateAxonMask(axonList.axonMask, axonList)
     axonList.minima = minImage
@@ -89,14 +89,14 @@ def run(params):
     :return: no return , axonlist saved
     """
     f_input = params["input"]
-    p_inputs = params["param"]
     try:
         f_output = params["output"]
     except KeyError:
         f_output = f_input + ".list.bin"
     image = io.imread(f_input)
-    axonList=axonSeg(image,p_inputs)
+    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
     axonList.save(f_output)
+
 
 
 def test():
@@ -108,7 +108,7 @@ def test():
     testImage = io.imread(filename)
     list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})
     mean=list.getDiameterMean();
-    print(mean,len(list.getAxoneList()))
+    print(mean,len(list.getAxonList()))
 
     io.imsave('../../test/axonMask.png', list.axonMask)
 

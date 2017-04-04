@@ -1,0 +1,20 @@
+{
+   "AxonSeg":[
+     {
+         "params":{
+            "input [path]":"",
+            "output [path]":""
+         }
+      }
+   ],
+   "MyelinSeg":[
+     {
+         "params":{
+            "input [path]":"",
+            "outputImage [path]":"",
+            "outputList [path]":""
+         }
+      }
+
+   ]
+}

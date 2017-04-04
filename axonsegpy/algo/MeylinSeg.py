@@ -1,6 +1,6 @@
 import pyximport;pyximport.install()
-from core.Axon import Axone
-from core.AxonList import AxoneList
+from core.Axon import Axon
+from core.AxonList import AxonList
 import numpy as np
 import os
 from skimage import io
@@ -70,6 +70,72 @@ def segMeylin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False):
     axon.setMeylin(meylin)
 
 
+
+def segMeylinExperimental(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,maxMeylinWidth = 15,diffDegree = 1):
+    meylin = np.zeros((2, 72, 2),dtype = np.int)
+
+
+    thisDelta = deltaVecs.copy()
+    pos = np.array([[axon.getPosx(), axon.getPosy()]])
+    currentPos = np.zeros((72, 2))
+    myLabel = labeledMask[int(axon.getPosx())][int(axon.getPosy())]
+
+    for i in range(72):
+        currentPos[i] = pos
+    progress = np.zeros(72, dtype = np.uint8)
+    progressValue = np.sum(progress)
+
+    while(progressValue != 72):
+        currentPos = currentPos + thisDelta
+        rounded = np.around(currentPos)
+        for i in range(72):
+            x = int(rounded[i][0])
+            y = int(rounded[i][1])
+            if x >= 0 and x < image.shape[0] and y >= 0 and y < image.shape[1] :
+                if progress[i]==0:
+                    labelVal = labeledMask[x][y]
+                    if labelVal != myLabel:
+                        meylin[0][i] = [x, y]
+                        progress[i] = 1
+            else:
+                meylin[0][i][0] = max(0, min(x, image.shape[0] - 1))
+                meylin[0][i][1] = max(0, min(y, image.shape[1] - 1))
+                progress[i] = 1
+        progressValue = np.sum(progress)
+    # initiate radial value map
+    currentPos = meylin[0].copy()
+
+    pixels = np.zeros((72, maxMeylinWidth), dtype=np.float)
+    coords = np.zeros((72, maxMeylinWidth, 2), dtype=np.int)
+    for i in range(maxMeylinWidth):
+        currentPos = currentPos + thisDelta
+        rounded = np.around(currentPos)
+        for j in range(72):
+            x = int(rounded[j][0])
+            y = int(rounded[j][1])
+            if image.shape[0] > x >= 0 and image.shape[1] > y >= 0:
+                coords[j][i] = [x, y]
+                pixels[j][i] = image[x][y]
+            else:
+                coords[j][i] = [-1, -1]
+                pixels[j][i] = 0
+
+    dif = np.diff(pixels, n=diffDegree)
+    np.set_printoptions(threshold=np.nan)
+    for i in range(72):
+        index = np.argmin(dif[i])
+        meylin[1][i]= coords[i][index]
+
+    if(snake):
+        meylin[0] = active_contour(image, meylin[0].astype(dtype = np.float64), alpha=0.015, beta=10, gamma=0.001, w_line=0, w_edge=1, bc='periodic',
+                       max_px_move=1.0, max_iterations=3, convergence=0.1).astype(dtype = np.int)
+        meylin[1] = active_contour(image, meylin[1].astype(dtype = np.float64), alpha=0.015, beta=10, gamma=0.001, w_edge=1 , bc='periodic',
+                       max_px_move=1.0, max_iterations=3, convergence=0.1).astype(dtype = np.int)
+
+    axon.setMeylin(meylin)
+
+
+
 def MeylinSeg(image, axonList,verbose = False):
     unitVec = np.array([1,0])
     deltaVecs = np.zeros((72,2))
@@ -86,9 +152,9 @@ def MeylinSeg(image, axonList,verbose = False):
 
     b= 0
     c = 0
-    total = len(axonList.getAxoneList())
+    total = len(axonList.getAxonList())
 
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         if(verbose):
             b+=1
             if(c*total<b):
@@ -96,15 +162,15 @@ def MeylinSeg(image, axonList,verbose = False):
                 c+=0.1
 
         #print(i,len(axonList.getAxoneList()))
-        i+=1
-        segMeylin(axon,image,labeledMask,deltaVecs,snake = True)
+        segMeylinExperimental(axon,image,labeledMask,deltaVecs)
+
 
 
 def MeylinVisualisation(image, axonList,size = 1):
     retImage = np.zeros(image.shape,dtype=np.uint8)
     dist = int((size-1)/2)
     a = 0
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         a+=1
         for i in range(72):
             for x in range(axon.getMeylin()[0][i][0]-dist,axon.getMeylin()[0][i][0]+dist+1):
@@ -122,7 +188,7 @@ def MeylinVisualisation(image, axonList,size = 1):
 def MeylinVisualisationFancy(image, axonList):
     retImage = np.zeros(image.shape, dtype=np.uint8)
     a = 0
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         #print(a)
         a += 1
         for i in range(72):
@@ -151,7 +217,7 @@ def MeylinVisualisationFancy(image, axonList):
 def MeylinVisualisationSuperFancy(image, axonList,min,max):
     retImage = np.zeros((image.shape[0],image.shape[1],3), dtype=np.uint8)
     a = 0
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         #print(a)
         a += 1
         axonDiam = axon.getAvMeylinDiameter()
@@ -186,7 +252,7 @@ def MeylinVisualisationSuperFancy(image, axonList,min,max):
 def MeylinVisualisationSuperDuperFancy(image, axonList,min,max):
     retImage = np.zeros((image.shape[0],image.shape[1],3), dtype=np.uint8)
     a = 0
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         #print(a)
         a += 1
         axonDiam = axon.getAvMeylinDiameter()
@@ -216,7 +282,7 @@ def test():
     io.imsave('../../test/axonMask.png', axonList.axonMask)
 
     mean=axonList.getDiameterMean();
-    print(mean,len(axonList.getAxoneList()))
+    print(mean,len(axonList.getAxonList()))
 
     MeylinSeg(testImage,axonList,verbose = True)
 
@@ -236,7 +302,7 @@ def run(params):
     outputLst = params["outputList"]
 
     if "inputList" in params:
-        melynList=AxoneList.load(params["inputList"])
+        melynList=AxonList.load(params["inputList"])
     else:
         melynList=AxonSeg.axonSeg(testImage,{"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85},True)
 
@@ -249,3 +315,4 @@ def run(params):
 
     melynList.save(outputLst)
 
+#test()

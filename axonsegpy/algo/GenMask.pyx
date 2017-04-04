@@ -2,8 +2,8 @@ import numpy as np
 import os
 from skimage import io
 from skimage import color
-from core.Axon import Axone
-from core.AxonList import AxoneList
+from core.Axon import Axon
+from core.AxonList import AxonList
 import skimage
 from libcpp.pair cimport pair
 from libcpp.stack cimport stack
@@ -38,7 +38,7 @@ cdef void drawAxon(char[:,:]& image,char[:,:]& maskImage,int posX,int posY,int m
 def generateAxonMask(image,axonList,maskValue = 255):
     cdef char[:, :] imageC = image.astype(np.uint8)
     cdef char [:,:] retImageC = np.zeros(image.shape, dtype=np.uint8)
-    for axon in axonList.getAxoneList():
+    for axon in axonList.getAxonList():
         drawAxon(imageC,retImageC,int(axon.getPosx()),int(axon.getPosy()),maskValue)
 
     return np.array(retImageC)

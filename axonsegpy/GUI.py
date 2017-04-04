@@ -1,47 +1,54 @@
 import tkinter as tk
+import sys
 import json
 import sys
 from tkinter import filedialog
 from tkinter import Spinbox
 from tkinter import Canvas
 from tkinter import RIGHT
+from tkinter import ttk
 from PIL import Image, ImageTk
-
+from core.readAlgoFile import readAlgo
+from core.readAlgoFile import getAlgoList
 from core.ConfigParser import parse
+from core.modifyConfigFile import addAlgorithme
 
 
-class TkFileDialogExample(tk.Frame):
+class GUI(tk.Frame):
 
   def __init__(self, root):
     self.photo = None
     self.filename=None
     self.configFile=("./test.json")
     tk.Frame.__init__(self, root)
-
+    self.parametre = {}
     # define canvas
     self.w = Canvas(root, width=200, height=200, borderwidth=3, background="black")
     self.w.pack(side=RIGHT)
-
+    self.algo={}
 
     # algorithms choice dropdown
-    lst1 = ['Extendedminima','Myelin','Algo 3']
-    var1 = tk.StringVar()
-    var1.set("Extendedminima")
-    drop = tk.OptionMenu(root,var1, *lst1)
+    lst1 = getAlgoList()
+    self.dropdownvalue = tk.StringVar()
+    self.dropdownvalue.set("Please Select")
+    drop = tk.OptionMenu(root,self.dropdownvalue, *lst1)
     drop.pack()
+
+    #TODO : Create different frames for
+
+
+
+    self.dropdownvalue.trace("w", self.callback)
+
 
     # options for buttons
     button_opt = {'fill': 'both' , 'padx': 5, 'pady': 5}
 
     # define buttons
     self.selectbtn = tk.Button(self, text='Select Image', command=self.askopenfilename).pack(**button_opt)
-    self.runalgobtn = tk.Button(self, text='Run algo', command=self.runalgorithm).pack(side=RIGHT, **button_opt)
+    self.runalgobtn = tk.Button(self, text='Run algo', command=self.runAlgorithm).pack(side=RIGHT, **button_opt)
     self.previewbtn = tk.Button(self, text='Preview', command=self.previewalgorithm).pack(**button_opt)
 
-
-    # define spinbox
-    s = Spinbox(root, from_=0, to=10)
-    s.pack()
 
 
     # define options for opening or saving a file
@@ -74,20 +81,67 @@ class TkFileDialogExample(tk.Frame):
       photo = ImageTk.PhotoImage(image)
       #self.w.create_image(photo)
 
+  def popUpAlgo(self,algo,nameAlgo):
+    """
+    :param algo: a list of algo
+    :return:
+    """
+    button_opt = {'fill': 'both', 'padx': 5, 'pady': 5}
+    popup=tk.Tk()
+    popup.wm_title("Select your parameters")
+    labelList=[]
+    entryList=[]
+
+    paramAlgo=algo[0]["params"]
+    keyAlgo=list(paramAlgo.keys())
+    nbrParam=len(paramAlgo)
+    for i in range(nbrParam):
+      labelList.append(tk.Label(popup,text=keyAlgo[i]))
+      entryList.append(tk.Entry(popup))
+      labelList[i].pack()
+      entryList[i].pack()
+    tk.Button(popup, text='Apply',command=lambda:self.appyAlgo(labelList,entryList,nameAlgo)).pack(**button_opt)
+    popup.mainloop()
+
+
   def previewalgorithm(self):
     # Here, the algo should be run
     # in future releases, it should take the canvas image as input
     # and output it in the canvas
     pass
-
-  def runalgorithm(self):
-    # Here, the algo should be run
-    # in future releases, it should take the canvas image as input
-    # and output it in the canvas
-    #TODO: Call modifyConfigFile
+  def appyAlgo(self,labelList,entryList,nameAlgo):
+    """
+    Loads a
+    :param labelList:
+    :param entryList:
+    :return:
+    """
+    for i in range(len(labelList)):
+        if entryList[i].get() == '':
+          return
+    for i in range(len(labelList)):
+        self.parametre[labelList[i].cget("text")]=entryList[i].get()
+    self.algo["name"]=nameAlgo
+    self.algo["parametre"]=self.parametre
+  def runAlgorithm(self):
+    """
+    Change configfile, launch algo
+    :return:
+    """
+    addAlgorithme(self.configFile,"preprocessing",self.algo)
     parse(self.configFile)
+
+
+  def callback(self, *args):
+    """
+    Callback for our dropdown
+    :param args:
+    :return:
+    """
+    print(self.dropdownvalue.get())
+    self.popUpAlgo(readAlgo(self.dropdownvalue.get()),self.dropdownvalue.get())
 
 if __name__=='__main__':
   root = tk.Tk()
-  TkFileDialogExample(root).pack()
+  GUI(root).pack()
   root.mainloop()
