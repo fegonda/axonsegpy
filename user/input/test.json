@@ -1,0 +1,27 @@
+{
+   "preprocessing":[
+   ],
+   "axonSegmentation":[
+   ],
+   "axonPostProcessing":[      
+      {
+         "name":"AxonSeg",
+         "params":{
+            "input":"../user/input/axone.png",
+            "output":"../user/output/axone.csv",
+            "minSize":15,
+            "Solidity":0.20,
+            "MinorMajorRatio":0.35
+         }
+      },
+      {
+         "name":"MeylinSeg",
+         "params":{
+            "input":"../user/input/AxonMask_AxonSeg.png",
+            "meylinImage":"../user/input/MyelinMask_AxonSeg.png",
+            "outputImage":"../user/output/myelin_mask.png",
+            "outputList":"../user/output/myelin.bin"
+         }
+      }
+   ]
+}
