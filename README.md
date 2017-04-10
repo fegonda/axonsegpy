@@ -11,25 +11,36 @@ NeuroPoly
 
 For windows users : 
 
-	Install miniconda
+    * Install miniconda *
 
-		https://repo.continuum.io/miniconda/Miniconda-3.5.5-Windows-x86_64.exe
+        Windows :
+
+            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-Windows-x86_64.exe
+
+        Mac :
+
+            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-MacOSX-x86_64.sh
+
+        Linux :
+
+            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-Linux-x86_64.sh
 
 
-	conda install --yes --file requirements.txt
+
+    conda install --yes --file requirements.txt
 
 
 For Mac and Linux :
 
 
-	Upgrade pip
+    Upgrade pip
 
-		python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip 
 
 
-	Install dependancies
+    Install dependancies
 
-		python3 -m pip install -r requirements.txt
+        python3 -m pip install -r requirements.txt 
 
 
 
