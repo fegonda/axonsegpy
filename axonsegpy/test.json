@@ -7,21 +7,21 @@
       {
          "name":"AxonSeg",
          "params":{
-            "input":"../user/input/axone.png",
-            "output":"../user/output/axone.csv",
-            "minSize":15,
-            "Solidity":0.20,
-            "MinorMajorRatio":0.35
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "output":"../tests/SegTest/Step_2_Initial_AxonSeg.csv",
+            "minSize":30,
+            "Solidity":0.3,
+            "MinorMajorRatio":0.1
          }
       },
       {
-         "name":"MeylinSeg",
+         "name":"MyelinSeg",
          "params":{
-            "input":"../user/input/AxonMask_AxonSeg.png",
-            "meylinImage":"../user/input/MyelinMask_AxonSeg.png",
-            "outputImage":"../user/output/myelin_mask.png",
-            "outputList":"../user/output/myelin.bin"
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg_mey.png",
+            "outputList":"../tests/SegTest/Step_2_Initial_AxonSeg.melyn.csv"
          }
       }
    ]
 }
+
