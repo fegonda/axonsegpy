@@ -8,9 +8,6 @@ NeuroPoly
 ## Only working with python 3.5
 
 
-
-For windows users : 
-
     * Install miniconda *
 
         Windows :
@@ -27,11 +24,17 @@ For windows users :
 
 
 
-    conda install --yes --file requirements.txt
+
+For windows users : 
+
+    Windows users MUST install miniconda (or anaconda), as scipy is broken and cannot work without the preloaded binaries from conda.
+
+        conda install --yes --file requirements.txt
 
 
 For Mac and Linux :
 
+    We strongly advise to use miniconda (or anaconda) even for Mac and Linux, but it is not necessary. It will work with any installation of python 3.5, as long you have the correct packages installed :
 
     Upgrade pip
 
@@ -41,8 +44,6 @@ For Mac and Linux :
     Install dependancies
 
         python3 -m pip install -r requirements.txt 
-
-
 
 
 
