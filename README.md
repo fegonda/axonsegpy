@@ -45,6 +45,11 @@ For Mac and Linux :
 
         python3 -m pip install -r requirements.txt 
 
+If you are using a Mac, you might need some extra libraries :
+
+    First install brew (https://brew.sh/)
+    
+         brew install gcc
 
 
 For manually editing the congiruation, you may want to create your own JSON, use axonsegpy/user/input/test.json as an example.
