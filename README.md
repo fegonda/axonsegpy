@@ -12,15 +12,15 @@ NeuroPoly
 
         Windows :
 
-            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-Windows-x86_64.exe
+            https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Windows-x86_64.exe
 
         Mac :
 
-            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-MacOSX-x86_64.sh
+            https://repo.continuum.io/miniconda/Miniconda3-4.2.12-MacOSX-x86_64.sh
 
         Linux :
 
-            https://repo.continuum.io/miniconda/Miniconda2-4.2.12-Linux-x86_64.sh
+            https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh
 
 
 
