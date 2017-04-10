@@ -53,7 +53,7 @@ class Axon:
          """
         return self.__diameter,self.__posxCentroide,self.__posyCentroide==other.__diametre,other.__posxCentroide,other.__posyCentroide
 
-    def setMeylin(self, meylin):
+    def setMyelin(self, meylin):
         self.meylin = meylin
         temp = 0
 
@@ -64,10 +64,10 @@ class Axon:
         self.meylinDiameter = temp
 
 
-    def getMeylin(self):
+    def getMyelin(self):
         return self.meylin
 
-    def getAvMeylinDiameter(self):
+    def getAvMyelinDiameter(self):
         return self.meylinDiameter
 
     def toArray(self):

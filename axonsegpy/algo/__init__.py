@@ -1,4 +1,4 @@
 from algo import AxonSeg
-from algo import GenMask
 from algo import MyelinSeg
-from algo import minima
+from lib import GenMask
+from lib import minima

@@ -117,9 +117,6 @@ class GUI(tk.Frame):
     :return:
     """
     for i in range(len(labelList)):
-        if entryList[i].get() == '':
-          return
-    for i in range(len(labelList)):
         self.parametre[labelList[i].cget("text")]=entryList[i].get()
     self.algo["name"]=nameAlgo
     self.algo["parametre"]=self.parametre

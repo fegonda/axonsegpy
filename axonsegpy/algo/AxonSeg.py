@@ -1,4 +1,4 @@
-import pyximport;pyximport.install()
+#import pyximport;pyximport.install()
 from core.Axon import Axon
 from core.AxonList import AxonList
 import numpy as np
@@ -8,8 +8,8 @@ from skimage import color
 from skimage import measure
 import time
 import cProfile
-from algo import minima
-from algo import GenMask
+from lib import minima
+from lib import GenMask
 from decimal import *
 
 def axonSeg(image, params,verbose = True):
@@ -93,7 +93,7 @@ def run(params):
         f_output = params["output"]
     except KeyError:
         f_output = f_input + ".list.bin"
-    image = io.imread(f_input)
+    image = io.imread(f_input, as_grey=True)
     axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
     axonList.save(f_output)
 
@@ -105,7 +105,7 @@ def test():
     :return:
     """
     filename = os.path.join('../../test/SegTest/', '20160830_CARS_Begin_07.tif')
-    testImage = io.imread(filename)
+    testImage = io.imread(filename, as_grey=True)
     list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})
     mean=list.getDiameterMean();
     print(mean,len(list.getAxonList()))
