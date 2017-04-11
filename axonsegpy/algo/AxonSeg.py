@@ -8,9 +8,19 @@ from skimage import color
 from skimage import measure
 import time
 import cProfile
-from lib import minima
-from lib import GenMask
 from decimal import *
+
+try:
+    import cython
+    import pyximport
+    pyximport.install()
+    from cythonLib import GenMask
+    from cythonLib import minima
+except:
+    from lib import minima
+    from lib import GenMask
+
+
 
 def axonSeg(image, params,verbose = True):
     """

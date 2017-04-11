@@ -1,4 +1,4 @@
-#import pyximport;pyximport.install()
+
 from core.Axon import Axon
 from core.AxonList import AxonList
 import numpy as np
@@ -11,9 +11,14 @@ from skimage import segmentation
 from skimage import filters
 import time
 from algo import AxonSeg
-from lib import GenMask
 from skimage.segmentation import active_contour
-
+try:
+    import cython
+    import pyximport
+    pyximport.install()
+    from cythonLib import GenMask
+except:
+    from lib import GenMask
 
 def segMyelin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,maxMyelinWidth = 15,diffDegree = 1, outlierDifinition = 1, nbIterations = 5):
     myelin = np.zeros((2, 72, 2),dtype = np.int)
