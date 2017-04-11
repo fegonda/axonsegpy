@@ -57,8 +57,8 @@ def segMyelin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,ma
     pixels = np.zeros((72, maxMyelinWidth), dtype=np.float)
     coords = np.zeros((72, maxMyelinWidth, 2), dtype=np.int)
     for i in range(maxMyelinWidth):
-        currentPos = currentPos + thisDelta
         rounded = np.around(currentPos)
+        currentPos = currentPos + thisDelta
         for j in range(72):
             x = int(rounded[j][0])
             y = int(rounded[j][1])
@@ -75,22 +75,24 @@ def segMyelin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,ma
     sizes = np.zeros(72)
     for i in range(72):
         index = np.argmin(dif[i])
-        myelin[1][i]= coords[i][index]
+        if coords[i][index][0] == -1:
+            index -= 1
+        myelin[1][i] = coords[i][index]
         sizes[i] = index
 
     for i in range(nbIterations):
         average = np.average(sizes)
-        std = np.std(sizes) * outlierDifinition
+        std = max(np.std(sizes) * outlierDifinition,1)
         minSlice = max(int(average - std),0)
         maxSlice = min(int(average + std),maxMyelinWidth)
-
-
-    for i in range(72):
-        if sizes[i]< minSlice or sizes[i]> maxSlice:
-            slice  = dif[i][minSlice:maxSlice]
-            index = np.argmin(slice) + minSlice
-            myelin[1][i] = coords[i][index]
-            sizes[i] = index
+        #print(minSlice,maxSlice,average,average + std)
+        for i in range(72):
+            if sizes[i]< minSlice or sizes[i]> maxSlice:
+                slice = dif[i][minSlice:maxSlice]
+                index = np.argmin(slice) + minSlice
+                if coords[i][index][0] != -1:
+                    myelin[1][i] = coords[i][index]
+                    sizes[i] = index
 
     if(snake):
         myelin[0] = active_contour(image, myelin[0].astype(dtype = np.float64), alpha=0.015, beta=10, gamma=0.001, w_line=0, w_edge=1, bc='periodic',
@@ -123,7 +125,7 @@ def MyelinSeg(image, axonList,verbose = False, maxWidth = 15, diff = 1, outlier 
         if(verbose):
             b+=1
             if(c*total<b):
-                print(round(c*100),'%')
+                #print(round(c*100),'%')
                 c+=0.1
 
         #print(i,len(axonList.getAxoneList()))
@@ -215,7 +217,7 @@ def MyelinVisualisationSuperFancy(image, axonList,min,max):
 def MyelinVisualisationSuperDuperFancy(image, axonList):
     min = 999
     max = -1
-    for axon in axonList:
+    for axon in axonList.getAxonList():
         if axon.getAvMyelinDiameter()<min:
             min = axon.getAvMyelinDiameter()
         if axon.getAvMyelinDiameter()>max:
@@ -235,33 +237,34 @@ def MyelinVisualisationSuperDuperFancy(image, axonList):
             rr, cc = draw.polygon(xs,ys)
             retImage[rr, cc,0] =  255*redValue
             retImage[rr, cc,2] =  255*blueValue
+
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            if(image[i][j]!=0):
+            if image[i][j]!=0:
                 retImage[i][j][0]= 0
-                retImage[i][j][2]=0
+                retImage[i][j][2]= 0
     return retImage
 
 
 def test():
-    filename = os.path.join('../test/SegTest/', '20160830_CARS_Begin_07.tif')
+    filename = os.path.join('C:\\Users\\Zihui\\PycharmProjects\\INF49x0-Projet_4-NeuroPoly\\tests\\SegTest', '20160830_CARS_Begin_07.tif')
     testImage = io.imread(filename, as_grey=True)
 
     axonList=AxonSeg.axonSeg(testImage,{"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85},True)
 
-    io.imsave('../test/axonMask.png', axonList.axonMask)
+    io.imsave('C:\\Users\\Zihui\\PycharmProjects\\INF49x0-Projet_4-NeuroPoly\\tests\\SegTest\\axonMask.png', axonList.axonMask)
 
     mean=axonList.getDiameterMean();
     print(mean,len(axonList.getAxonList()))
 
     MyelinSeg(testImage,axonList,verbose = True)
 
-    myelinVisual = MyelinVisualisation(testImage,axonList)
-    myelinVisual = myelinVisual*0.5+testImage*0.5
-    myelinVisual = np.maximum(myelinVisual.astype(np.int),axonList.axonMask)
-    io.imsave('../test/myelinVisual.png', myelinVisual)
+    myelinVisual = MyelinVisualisationSuperDuperFancy(axonList.axonMask,axonList)
+#    myelinVisual = myelinVisual*0.5+testImage*0.5
+#    myelinVisual = np.maximum(myelinVisual.astype(np.int),axonList.axonMask)
+    io.imsave('C:\\Users\\Zihui\\PycharmProjects\\INF49x0-Projet_4-NeuroPoly\\tests\\SegTest\\myelinVisual.png', myelinVisual)
 
-    io.imsave('../test/minima.png', axonList.minima)
+    io.imsave('C:\\Users\\Zihui\\PycharmProjects\\INF49x0-Projet_4-NeuroPoly\\tests\\SegTest\\minima.png', axonList.minima)
 
 
 
@@ -316,12 +319,8 @@ def run(params):
 
     MyelinSeg(testImage,melynList,verbose = v,maxWidth=w,diff=d,outlier=o)
 
-    if "display" in params:
-        display = params["display"] is "full"
-    else:
-        display = False
-    if display:
-        myelinVisual = MyelinVisualisationSuperDuperFancy(testImage,melynList)
+    if "display" in params and params["display"] == "full":
+        myelinVisual = MyelinVisualisationSuperDuperFancy(melynList.axonMask,melynList)
     else:
         myelinVisual = MyelinVisualisation(testImage,melynList)
         myelinVisual = myelinVisual*0.5+testImage*0.5
@@ -331,3 +330,4 @@ def run(params):
     melynList.save(outputLst)
 
 
+#test()
