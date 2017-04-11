@@ -5,7 +5,7 @@ NeuroPoly
 
 # WARNING
 
-## Only working with python 3.5
+## Only working with python 3.5 and 3.6
 
 
     * Install miniconda *
