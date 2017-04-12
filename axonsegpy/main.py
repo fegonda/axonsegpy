@@ -1,7 +1,6 @@
 import sys
 import argparse
 
-# Temporary (to remove !!!) ##TODO
 from core import ConfigParser
 
 def IntegrityTest():
@@ -46,8 +45,8 @@ def IntegrityTest():
             "output":"Simulation_img.csv",
             "outputImage":"Simulation_img.png",
 
-            "minSize":1,
-            "maxSize":1000,
+            "minSize":10,
+            "maxSize":1200,
             "Solidity":0.5,
             "MinorMajorRatio":0.25
          }
@@ -63,8 +62,8 @@ def IntegrityTest():
             "outputImage":"Simulation_img.melyn.png",
             "outputList":"Simulation_img.melyn.csv",
 
-            "minSize":1,
-            "maxSize":1000,
+            "minSize":10,
+            "maxSize":1200,
             "Solidity":0.5,
             "MinorMajorRatio":0.25
          }
