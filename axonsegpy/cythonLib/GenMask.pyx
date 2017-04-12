@@ -43,6 +43,33 @@ def generateAxonMask(image,axonList,maskValue = 255):
 
     return np.array(retImageC)
 
+def axonVisualisation(image,axonList):
+
+    cdef char[:, :] imageC = image.astype(np.uint8)
+    cdef char [:,:] retImageC = np.zeros(image.shape, dtype=np.uint8)
+    retImageTotal = np.zeros([image.shape[0],image.shape[1],3], dtype=np.uint8)
+    min = 999
+    max = -1
+    for axon in axonList.getAxonList():
+        diam = axon.getDiameter()
+        if diam < min:
+            min = diam
+        if diam > max:
+            max = diam
+    for axon in axonList.getAxonList():
+        value = axon.getDiameter()
+        value = int(((value - min)/(max-min))*254)+1
+
+        drawAxon(imageC,retImageC,int(axon.getPosx()),int(axon.getPosy()),value)
+    cdef x = image.shape[0]
+    cdef y = image.shape[1]
+
+    for i in range(x):
+        for j in range(y):
+            if retImageC[i][j] != 0:
+                retImageTotal[i][j][0] = retImageC[i][j]
+                retImageTotal[i][j][2] = 255-retImageC[i][j]
+    return retImageTotal
 
 
 def run(path):

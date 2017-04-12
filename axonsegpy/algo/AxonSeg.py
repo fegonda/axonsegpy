@@ -1,4 +1,4 @@
-import pyximport;pyximport.install()
+#import pyximport;pyximport.install()
 from core.Axon import Axon
 from core.AxonList import AxonList
 import numpy as np
@@ -8,9 +8,19 @@ from skimage import color
 from skimage import measure
 import time
 import cProfile
-from algo import minima
-from algo import GenMask
 from decimal import *
+
+try:
+    import cython
+    import pyximport
+    pyximport.install()
+    from cythonLib import GenMask
+    from cythonLib import minima
+except:
+    from lib import minima
+    from lib import GenMask
+
+
 
 def axonSeg(image, params,verbose = True):
     """
@@ -82,6 +92,7 @@ def axonSeg(image, params,verbose = True):
     return axonList
 
 
+
 def run(params):
     """
     " this methods run the algo
@@ -93,9 +104,21 @@ def run(params):
         f_output = params["output"]
     except KeyError:
         f_output = f_input + ".list.bin"
-    image = io.imread(f_input)
-    axonList=axonSeg(image,{"minSize":30,"Solidity":0.3,"MinorMajorRatio":0.1})
+    image = io.imread(f_input, as_grey=True)
+    axonList=axonSeg(image,params)
     axonList.save(f_output)
+
+    if "display" in params and params["display"] == "full":
+        axonVisual = GenMask.axonVisualisation(axonList.axonMask, axonList)
+    else:
+        axonVisual = axonList.axonMask
+
+    if "outputImage" in params:
+        outputImg = params["outputImage"]
+    else:
+        outputImg = os.path.join(f_input,"axonMask")
+    io.imsave(outputImg, axonVisual)
+
 
 
 
@@ -105,11 +128,8 @@ def test():
     :return:
     """
     filename = os.path.join('../../test/SegTest/', '20160830_CARS_Begin_07.tif')
-    testImage = io.imread(filename)
+    testImage = io.imread(filename, as_grey=True)
     list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})
     mean=list.getDiameterMean();
     print(mean,len(list.getAxonList()))
-
     io.imsave('../../test/axonMask.png', list.axonMask)
-
-

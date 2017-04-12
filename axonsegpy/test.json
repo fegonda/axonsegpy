@@ -1,0 +1,29 @@
+{
+   "preprocessing":[
+      {
+         "name":"AxonSeg",
+         "params":{
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "output":"../tests/SegTest/Step_2_Initial_AxonSeg.csv",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg.png",
+            "minSize":30,
+            "maxSize":1000,
+            "Solidity":0.7,
+            "MinorMajorRatio":0.85
+         }
+      }
+   ],
+   "axonSegmentation":[
+   ],
+   "axonPostProcessing":[
+      {
+         "name":"MyelinSeg",
+         "params":{
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg_mey.png",
+            "outputList":"../tests/SegTest/Step_2_Initial_AxonSeg.melyn.csv",
+            "display":"full"
+         }
+      }
+   ]
+}

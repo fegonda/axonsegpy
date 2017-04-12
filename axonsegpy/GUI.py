@@ -101,6 +101,7 @@ class GUI(tk.Frame):
       labelList[i].pack()
       entryList[i].pack()
     tk.Button(popup, text='Apply',command=lambda:self.appyAlgo(labelList,entryList,nameAlgo)).pack(**button_opt)
+    tk.Button(popup, text='Done', command=popup.destroy).pack(**button_opt)
     popup.mainloop()
 
 
@@ -117,9 +118,6 @@ class GUI(tk.Frame):
     :return:
     """
     for i in range(len(labelList)):
-        if entryList[i].get() == '':
-          return
-    for i in range(len(labelList)):
         self.parametre[labelList[i].cget("text")]=entryList[i].get()
     self.algo["name"]=nameAlgo
     self.algo["parametre"]=self.parametre
@@ -129,7 +127,7 @@ class GUI(tk.Frame):
     :return:
     """
     addAlgorithme(self.configFile,"preprocessing",self.algo)
-    parse(self.configFile)
+    #parse(self.configFile)
 
 
   def callback(self, *args):
