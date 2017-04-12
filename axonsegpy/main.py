@@ -46,7 +46,7 @@ def IntegrityTest():
             "outputImage":"Simulation_img.png",
 
             "minSize":10,
-            "maxSize":1200,
+            "maxSize":1500,
             "Solidity":0.5,
             "MinorMajorRatio":0.25
          }
@@ -63,7 +63,7 @@ def IntegrityTest():
             "outputList":"Simulation_img.melyn.csv",
 
             "minSize":10,
-            "maxSize":1200,
+            "maxSize":1500,
             "Solidity":0.5,
             "MinorMajorRatio":0.25
          }
