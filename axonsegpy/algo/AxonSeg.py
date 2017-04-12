@@ -92,6 +92,7 @@ def axonSeg(image, params,verbose = True):
     return axonList
 
 
+
 def run(params):
     """
     " this methods run the algo
@@ -107,6 +108,18 @@ def run(params):
     axonList=axonSeg(image,params)
     axonList.save(f_output)
 
+    if "display" in params and params["display"] == "full":
+        axonVisual = GenMask.axonVisualisation(axonList.axonMask, axonList)
+    else:
+        axonVisual = axonList.axonMask
+
+    if "outputImage" in params:
+        outputImg = params["outputImage"]
+    else:
+        outputImg = os.path.join(f_input,"axonMask")
+    io.imsave(outputImg, axonVisual)
+
+
 
 
 def test():
@@ -119,7 +132,4 @@ def test():
     list=axonSeg(testImage,{"minSize":30,"Solidity":0.75,"MinorMajorRatio":0.8})
     mean=list.getDiameterMean();
     print(mean,len(list.getAxonList()))
-
     io.imsave('../../test/axonMask.png', list.axonMask)
-
-

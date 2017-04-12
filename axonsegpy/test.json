@@ -5,6 +5,7 @@
          "params":{
             "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
             "output":"../tests/SegTest/Step_2_Initial_AxonSeg.csv",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg.png",
             "minSize":30,
             "maxSize":1000,
             "Solidity":0.7,
