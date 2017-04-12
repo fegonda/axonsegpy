@@ -58,13 +58,13 @@ NB : If yo uwant to compile your own cython modules (isntead of using the precom
 
 To install on mac, you will need : 
 
-1- Install brew (http://brew.sh/)
-2- In the terminal, enter : "brew install gcc --without-multilib" (grab a coffee, this takes quite a while - but needed because default brew installation of gcc doesn't have OpenMP support)
-3- "export CXX=/usr/local/Cellar/gcc/6.1.0/bin/g++-6" (use the path from the output of brew gcc install. at the time of writing the above is correct, but may change. Do this or otherwise osx still uses clang to compile)
-4- "export CC=/usr/local/Cellar/gcc/6.1.0/bin/gcc+-6" (samething again, use the good path)
-5- "brew install eigen"
-6- "brew install anaconda3"
-7- Run the main.py with the anaconda3 python interpeter.
+    1- Install brew (http://brew.sh/)
+    2- In the terminal, enter : "brew install gcc --without-multilib" (grab a coffee, this takes quite a while - but needed because default brew installation of gcc doesn't have OpenMP support)
+    3- "export CXX=/usr/local/Cellar/gcc/6.1.0/bin/g++-6" (use the path from the output of brew gcc install. at the time of writing the above is correct, but may change. Do this or otherwise osx still uses clang to compile)
+    4- "export CC=/usr/local/Cellar/gcc/6.1.0/bin/gcc+-6" (samething again, use the good path)
+    5- "brew install eigen"
+    6- "brew install anaconda3"
+    7- Run the main.py with the anaconda3 python interpeter.
 
 
 
