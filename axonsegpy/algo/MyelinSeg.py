@@ -294,7 +294,16 @@ def run(params):
     if "inputList" in params:
         melynList=AxonList.load(params["inputList"])
     else:
-        melynList=AxonSeg.axonSeg(testImage,{"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85},True)
+        inp = {"minSize":30,"maxSize":1000,"Solidity":0.7,"MinorMajorRatio":0.85}
+        if "minSize" in params:
+            inp["minSize"] = params["minSize"]
+        if "maxSize" in params:
+            inp["maxSize"] = params["maxSize"]
+        if "Solidity" in params:
+            inp["Solidity"] = params["Solidity"]
+        if "MinorMajorRatio" in params:
+            inp["MinorMajorRatio"] = params["MinorMajorRatio"]
+        melynList=AxonSeg.axonSeg(testImage,inp,True)
 
     if "verbose" in params:
         v = params["verbose"] is "True"
