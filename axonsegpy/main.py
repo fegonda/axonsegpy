@@ -1,6 +1,30 @@
 import sys, os
-import argparse
 
+### OS WINDOWS MAGIC ###
+if sys.platform == "win32" and sys.version_info < (3, 0): # We are running python 2 on windows
+    import datetime
+    year = datetime.date.today().year
+    stop = False
+    for y in range(2000, year + 1 ):
+        y = str(y)[-2:]
+        try:
+            print("Detecting visual studio [" + "%VS"+y+"0" + "] installation in : " + os.environ["VS"+y+"0COMNTOOLS"])
+            os.environ["VS90COMNTOOLS"] = "%VS"+y+"0COMNTOOLS%"
+            stop = True
+        except:
+            pass
+        if stop:
+            break
+    if not stop:
+        print("Will use binary files instead of cython") # If we dont find them, we wont use cython then.
+    # Actually, we are detecting the OS and python version, if its windows and python2
+    # We must add to the current path the link to the build tools.
+    # Since we dont know wich one we have, we go through every possible path
+    # (aka current year - 2000) and we check if it exists.
+    # If it does, we add it then we stop searching.
+### END OF OS MAGIC ###
+
+import argparse
 from core import ConfigParser
 
 def IntegrityTest():
