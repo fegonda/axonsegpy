@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import argparse
 
 from core import ConfigParser
@@ -137,7 +137,7 @@ def main():
         IntegrityTest()
     else :
         if config == "" or config == None:
-            config = "./test.json" # Test configuration
+            config = os.getcwd() + "/config.json" # Local configuration
 
         # We initialise the algo runner with an aldo
         ConfigParser.parse(config)

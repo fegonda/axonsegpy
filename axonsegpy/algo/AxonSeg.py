@@ -14,11 +14,11 @@ try:
     import cython
     import pyximport
     pyximport.install()
-    from cythonLib import GenMask
-    from cythonLib import minima
+    from lib.cythonLib import GenMask
+    from lib.cythonLib import minima
 except:
-    from lib import minima
-    from lib import GenMask
+    from lib.compiledLib import minima
+    from lib.compiledLib import GenMask
 
 
 

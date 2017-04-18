@@ -16,9 +16,9 @@ try:
     import cython
     import pyximport
     pyximport.install()
-    from cythonLib import GenMask
+    from lib.cythonLib import GenMask
 except:
-    from lib import GenMask
+    from lib.compiledLib import GenMask
 
 def segMyelin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,maxMyelinWidth = 15,diffDegree = 1, outlierDifinition = 1, nbIterations = 5):
     myelin = np.zeros((2, 72, 2),dtype = np.int)

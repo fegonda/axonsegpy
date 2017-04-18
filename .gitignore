@@ -184,3 +184,10 @@ ENV/
 # We actually dont need the pyCharm stuff at all in this Git, they are useful only in the developpement one :
 .idea/
 .idea/*
+
+
+###
+### Project only
+###
+
+config/output
