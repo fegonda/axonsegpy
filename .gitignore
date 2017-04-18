@@ -93,9 +93,10 @@ fabric.properties
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyxbldc
 
 # C extensions
-*.so
+#*.so
 
 # Distribution / packaging
 .Python

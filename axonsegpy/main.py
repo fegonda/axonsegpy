@@ -41,7 +41,7 @@ def IntegrityTest():
       {
          "name":"AxonSeg",
          "params":{
-            "input":"../tests/SegTest/Simulation_img.tif",
+            "input":".../config/input/20160830_CARS_Begin_07.tif",
             "output":"Simulation_img.csv",
             "outputImage":"Simulation_img.png",
 
@@ -58,7 +58,7 @@ def IntegrityTest():
       {
          "name":"MyelinSeg",
          "params":{
-            "input":"../tests/SegTest/Simulation_img.tif",
+            "input":"../config/input/20160830_CARS_Begin_07.tif",
             "outputImage":"Simulation_img.melyn.png",
             "outputList":"Simulation_img.melyn.csv",
 

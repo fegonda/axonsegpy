@@ -93,7 +93,10 @@ class AxonList:
         """
         :param output: file where to save
         """
-        import _pickle as cPickle
+        try:
+            import _pickle as cPickle
+        except:
+            import pickle as cPickle
         fileFormat = output.split('.')[-1]
         if fileFormat == "csv":
             # In CSV, we ignore the tags, for now
@@ -119,7 +122,10 @@ class AxonList:
         :param output: file where to save
         :param format: format to save into
         """
-        import _pickle as cPickle
+        try:
+            import _pickle as cPickle
+        except:
+            import pickle as cPickle
         if inputFile.split('.')[-1] != "bin":
             #  TODO Import CSV ?
             print("Sorry, can only import binary numpy arrays for now !\n\tSo we can't import CSV for the moment.")
