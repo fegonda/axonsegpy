@@ -1,8 +1,9 @@
 
 import sys, os
 
-### OS WINDOWS MAGIC ###
-if sys.platform == "win32" and sys.version_info < (3, 0): # We are running python 2 on windows
+### OS MAGIC ###
+
+if sys.platform == "win32": # We are running on windows
     import datetime
     year = datetime.date.today().year
     stop = False
@@ -18,11 +19,34 @@ if sys.platform == "win32" and sys.version_info < (3, 0): # We are running pytho
             break
     if not stop:
         print("Will use binary files instead of cython") # If we dont find them, we wont use cython then.
-    # Actually, we are detecting the OS and python version, if its windows and python2
+    # Actually, we are detecting the OS
     # We must add to the current path the link to the build tools.
     # Since we dont know wich one we have, we go through every possible path
     # (aka current year - 2000) and we check if it exists.
     # If it does, we add it then we stop searching.
+    # See http://stackoverflow.com/a/10558328/625189
+
+elif sys.platform == "darwin":
+    path = '/usr/local/Cellar/gcc/'
+    name_list = os.listdir(path)
+    full_list = [os.path.join(path,i) for i in name_list]
+    time_sorted_list = sorted(full_list, key=os.path.getmtime)[::-1]
+    found = False
+    for p in time_sorted_list:
+        try:
+            version = p.split('/')[-1].split('.')[0]
+            p += "/bin/"
+            CXX = p + "g++-" + version
+            CC = p + "gcc+-" + version
+            if os.path.isfile(CXX) and os.path.isfile(CC):
+                found = True
+        except:
+            continue
+        if found:
+            break
+    # TODO : Do something more elegant, using the $PATH and testing gcc instances with -fopenmp ie.
+    # See https://github.com/ppwwyyxx/OpenPano/issues/16
+
 ### END OF OS MAGIC ###
 
 import argparse
