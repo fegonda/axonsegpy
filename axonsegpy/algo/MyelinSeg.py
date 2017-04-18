@@ -18,7 +18,10 @@ try:
     pyximport.install()
     from lib.cythonLib import GenMask
 except:
-    from lib.compiledLib import GenMask
+    try:
+        from lib.compiledLib import GenMask
+    except: 
+        from lib.compiledLib.osxpy2 import GenMask
 
 def segMyelin(axon,image,labeledMask,deltaVecs,snake = False, verbose = False,maxMyelinWidth = 15,diffDegree = 1, outlierDifinition = 1, nbIterations = 5):
     myelin = np.zeros((2, 72, 2),dtype = np.int)

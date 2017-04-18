@@ -1,4 +1,3 @@
-#import pyximport;pyximport.install()
 from core.Axon import Axon
 from core.AxonList import AxonList
 import numpy as np
@@ -17,8 +16,12 @@ try:
     from lib.cythonLib import GenMask
     from lib.cythonLib import minima
 except:
-    from lib.compiledLib import minima
-    from lib.compiledLib import GenMask
+    try:
+        from lib.compiledLib import minima
+        from lib.compiledLib import GenMask
+    except: 
+        from lib.compiledLib.osxpy2 import minima
+        from lib.compiledLib.osxpy2 import GenMask
 
 
 
