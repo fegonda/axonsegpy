@@ -3,13 +3,17 @@
       {
          "name":"AxonSeg",
          "params":{
-            "input":"../config/input/20160830_CARS_Begin_07.tif",
-            "output":"../config/output/Step_2_Initial_AxonSeg.csv",
-            "outputImage":"../config/output/Step_2_Initial_AxonSeg.png",
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "output":"../tests/SegTest/Step_2_Initial_AxonSeg.bin",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg.png",
             "minSize":30,
             "maxSize":1000,
             "Solidity":0.7,
-            "MinorMajorRatio":0.85
+            "MinorMajorRatio":0.85,
+            "display": "full",
+            "displayColorLow":"0,0,255",
+            "displayColorHigh":"255,0,0"
+
          }
       }
    ],
@@ -19,10 +23,14 @@
       {
          "name":"MyelinSeg",
          "params":{
-            "input":"../config/input/20160830_CARS_Begin_07.tif",
-            "outputImage":"../config/output/Step_2_Initial_AxonSeg_mey.png",
-            "outputList":"../config/output/Step_2_Initial_AxonSeg.melyn.csv",
-            "display":"full"
+            "input":"../tests/SegTest/20160830_CARS_Begin_07.tif",
+            "inputList": "../tests/SegTest/Step_2_Initial_AxonSeg.bin",
+            "outputImage":"../tests/SegTest/Step_2_Initial_AxonSeg_mey.png",
+            "outputList":"../tests/SegTest/Step_2_Initial_AxonSeg.melyn.csv",
+            "display":"full",
+            "displayColorLow":"0,0,255",
+            "displayColorHigh":"255,0,0"
+
          }
       }
    ]

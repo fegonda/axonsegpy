@@ -89,6 +89,12 @@ class AxonList:
             temp+=axon.getDiameter()
         return temp/self.getNbrAxon()
 
+    def setAxonMask(self,axonMask):
+        self.__axonMask = axonMask
+
+    def getAxonMask(self):
+        return self.__axonMask
+
     def save(self, output):
         """
         :param output: file where to save
@@ -115,7 +121,7 @@ class AxonList:
         else:
             if output[-4:] != ".bin":
                 output += ".bin"
-            cPickle.dump(self.__listAxon, open(output, "wb"))
+            cPickle.dump(self, open(output, "wb"))
 
     def load(self, inputFile):
         """
@@ -130,6 +136,8 @@ class AxonList:
             #  TODO Import CSV ?
             print("Sorry, can only import binary numpy arrays for now !\n\tSo we can't import CSV for the moment.")
         else:
-            self.__listAxon = cPickle.load(open(inputFile, "rb"))
+            obj = cPickle.load(open(inputFile, "rb"))
+            self.__class__ = obj.__class__
+            self.__dict__ = obj.__dict__
 
 

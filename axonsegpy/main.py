@@ -1,4 +1,4 @@
-
+        
 import sys, os
 
 ### OS MAGIC ###
@@ -37,13 +37,15 @@ elif sys.platform == "darwin":
             version = p.split('/')[-1].split('.')[0]
             p += "/bin/"
             CXX = p + "g++-" + version
-            CC = p + "gcc+-" + version
+            CC = p + "gcc-" + version
             if os.path.isfile(CXX) and os.path.isfile(CC):
                 found = True
+                break
         except:
             continue
-        if found:
-            break
+    if found:
+        os.environ["CXX"] = CXX
+        os.environ["CC"] = CC
     # TODO : Do something more elegant, using the $PATH and testing gcc instances with -fopenmp ie.
     # See https://github.com/ppwwyyxx/OpenPano/issues/16
 

@@ -43,7 +43,7 @@ def generateAxonMask(image,axonList,maskValue = 255):
 
     return np.array(retImageC)
 
-def axonVisualisation(image,axonList):
+def axonVisualisation(image,axonList,parameterDic, colorLow,colorHigh):
 
     cdef char[:, :] imageC = image.astype(np.uint8)
     cdef char [:,:] retImageC = np.zeros(image.shape, dtype=np.uint8)
@@ -51,24 +51,26 @@ def axonVisualisation(image,axonList):
     min = 999
     max = -1
     for axon in axonList.getAxonList():
-        diam = axon.getDiameter()
-        if diam < min:
-            min = diam
-        if diam > max:
-            max = diam
+        current = parameterDic[axon]
+        if current < min:
+            min = current
+        if current > max:
+            max = current
     for axon in axonList.getAxonList():
-        value = axon.getDiameter()
+        value = parameterDic[axon]
         value = int(((value - min)/(max-min))*254)+1
-
         drawAxon(imageC,retImageC,int(axon.getPosx()),int(axon.getPosy()),value)
+        if(value<0):
+            print(value)
     cdef x = image.shape[0]
     cdef y = image.shape[1]
 
     for i in range(x):
         for j in range(y):
             if retImageC[i][j] != 0:
-                retImageTotal[i][j][0] = retImageC[i][j]
-                retImageTotal[i][j][2] = 255-retImageC[i][j]
+                if(128<retImageC[i][j] < -128 ):
+                    print(retImageC[i][j])
+                retImageTotal[i][j] = (float(retImageC[i][j]+128)/255)*colorHigh + (1-float(retImageC[i][j]+128)/255)*colorLow
     return retImageTotal
 
 

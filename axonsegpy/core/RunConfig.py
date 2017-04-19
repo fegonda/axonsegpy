@@ -3,9 +3,9 @@ from core import *
 from sys import modules
 
 def runAlgo(name, variables):
-	try:
+#	try:
 		modules["algo."+name].run(variables)
 
-	except Exception as e:
-		print(str(e))
-		print("Error in module '" + name + "' found !")
+#	except Exception as e:
+#		print(str(e))
+#		print("Error in module '" + name + "' found !")
