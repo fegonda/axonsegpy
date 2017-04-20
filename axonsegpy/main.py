@@ -92,14 +92,16 @@ def IntegrityTest():
       {
          "name":"AxonSeg",
          "params":{
-            "input":".../config/input/20160830_CARS_Begin_07.tif",
-            "output":"Simulation_img.csv",
+            "input":"../config/input/Simulation_img.tif",
+            "output":"Simulation_img.bin",
             "outputImage":"Simulation_img.png",
-
-            "minSize":10,
-            "maxSize":1500,
-            "Solidity":0.5,
-            "MinorMajorRatio":0.25
+            "minSize":30,
+            "maxSize":1600,
+            "Solidity":0.7,
+            "MinorMajorRatio":0.85,
+            "display": "full",
+            "displayColorLow":"0,0,255",
+            "displayColorHigh":"255,0,0"
          }
       }
    ],
@@ -109,14 +111,17 @@ def IntegrityTest():
       {
          "name":"MyelinSeg",
          "params":{
-            "input":"../config/input/20160830_CARS_Begin_07.tif",
+            "inputList": "Simulation_img.bin",
+            "input":"../config/input/Simulation_img.tif",
             "outputImage":"Simulation_img.melyn.png",
             "outputList":"Simulation_img.melyn.csv",
-
-            "minSize":10,
-            "maxSize":1500,
-            "Solidity":0.5,
-            "MinorMajorRatio":0.25
+            "minSize":30,
+            "maxSize":1600,
+            "Solidity":0.7,
+            "MinorMajorRatio":0.85,
+            "display":"full",
+            "displayColorLow":"0,0,255",
+            "displayColorHigh":"255,0,0"
          }
       }
    ]
@@ -134,7 +139,7 @@ def IntegrityTest():
     if failure:
         print("Error running tests, crash detected !")
 
-    if (not os.path.isfile("Simulation_img.csv")) or (not os.path.isfile("Simulation_img.png")) :
+    if (not os.path.isfile("Simulation_img.bin")) or (not os.path.isfile("Simulation_img.png")) :
         failure = True
         print("Error, failed the segmentation phase !")
     if (not os.path.isfile("Simulation_img.melyn.csv")) or (not os.path.isfile("Simulation_img.melyn.png")) :
@@ -144,7 +149,7 @@ def IntegrityTest():
     if failure:
         try:
             os.remove(j_name)
-            os.remove("Simulation_img.csv")
+            os.remove("Simulation_img.bin")
             os.remove("Simulation_img.png")
             os.remove("Simulation_img.melyn.png")
             os.remove("Simulation_img.melyn.csv")
@@ -152,23 +157,22 @@ def IntegrityTest():
             pass
         exit(-1)
 
-    axon = open("Simulation_img.csv").readlines()
-    axon = list(filter(None, axon))
-
     melyn = open("Simulation_img.melyn.csv").readlines()
     melyn = list(filter(None, melyn))
 
     EXPECTED_AXON = 200
-    axonFound = len(axon)
+    axonFound = len(melyn)
     print("Found %i/%i axon with current algorithmes. This is a %f%% difference !" % ( axonFound, EXPECTED_AXON, (EXPECTED_AXON - axonFound)/EXPECTED_AXON*100))
-
-    dicing = dice("../tests/SegTest/Simulation_img.tif", "Simulation_img.melyn.png")
-    print("And Mask is %f%% similar to original image." % (dicing * 100.0))
+    try:
+        dicing = dice("../config/input/Simulation_img.tif", "Simulation_img.melyn.png")
+        print("And Mask is %f%% similar to original image." % (dicing * 100.0))
+    except: 
+        print("Dicing failed ! Error in melyn phase !")
 
     os.remove(j_name)
-    os.remove("Simulation_img.csv")
+    os.remove("Simulation_img.bin")
     os.remove("Simulation_img.png")
-    #os.remove("Simulation_img.melyn.png")
+    os.remove("Simulation_img.melyn.png")
     os.remove("Simulation_img.melyn.csv")
 
 
