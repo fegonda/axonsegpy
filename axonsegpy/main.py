@@ -10,8 +10,8 @@ if sys.platform == "win32": # We are running on windows
     for y in range(2000, year + 1 ):
         y = str(y)[-2:]
         try:
-            print("Detecting visual studio [" + "%VS"+y+"0" + "] installation in : " + os.environ["VS"+y+"0COMNTOOLS"])
-            os.environ["VS90COMNTOOLS"] = "%VS"+y+"0COMNTOOLS%"
+            print("Detecting visual studio [" + "VS"+y+"0" + "] installation in : " + os.environ["VS"+y+"0COMNTOOLS"])
+            os.environ["VS90COMNTOOLS"] = os.environ["VS"+y+"0COMNTOOLS"]
             stop = True
         except:
             pass
